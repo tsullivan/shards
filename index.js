@@ -1,5 +1,12 @@
 const { groupBy, last } = require('lodash');
-const shards = require('./shards');
+const shardsJson = require('./shards');
+
+// eslint-disable-next-line no-unused-vars
+const shards = shardsJson.filter((s) => {
+  // NOTE add optional filter condition here
+  // return s.node && s.node.indexOf('cortez') !== -1;
+  return true;
+});
 
 const sizeGroups = groupBy(shards, (s) => {
   const gb = s.store / 1000 / 1000 / 1000; // convert bytes to gb

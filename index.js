@@ -26,23 +26,21 @@ const stateGroups = groupBy(shards, (s) => s.prirep + '-' + s.state);
 const byteGroups = groupBy(shards, (s) => {
   const gb = s.store / 1000 / 1000 / 1000; // convert bytes to gb
   const group = Math.ceil(gb / 50) * 50; // round s.store to the nearest 50gb
-  return group + 'gb';
+  return group;
 });
 
 const byteKeys = Object.keys(byteGroups).map((k) => parseInt(k, 10));
-byteKeys.sort();
+byteKeys.sort((a, b) => a - b); // ensure numeric not unicode sort
 
-const byteGroupsSummary = byteKeys.reduce((accum, curr) => {
-  const currGroup = curr + 'gb';
-  return Object.assign({},
-    accum,
-    { [currGroup]: byteGroups[currGroup].length }
-  );
-}, {});
+const byteGroupsSummary = [];
+byteKeys.forEach((key) => {
+  const currGroup = key;
+  byteGroupsSummary.push(`${currGroup}: ${byteGroups[currGroup].length}`);
+});
 
 const biggest = {
-  bytes: last(byteKeys) + 'gb',
-  shards: byteGroups[last(byteKeys) + 'gb'],
+  bytes: last(byteKeys),
+  shards: byteGroups[last(byteKeys)],
 };
 
 //eslint-disable-next-line no-console
@@ -51,8 +49,8 @@ console.log(
     num_shards_total: shards.length,
     nodes: nodeGroupsSummary,
     states: stateGroups,
-    shards_by_bytes_full: byteGroups,
-    shards_by_bytes_summary: byteGroupsSummary,
+    shards_by_gb_full: byteGroups,
+    shards_by_gb_summary: byteGroupsSummary,
     biggest,
   })
 );

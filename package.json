@@ -1,0 +1,17 @@
+{
+  "name": "shards",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tim Sullivan",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^4.15.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
+}

@@ -10,16 +10,8 @@ const shards = shardsJson.filter((s) => {
 
 const nodeGroups = groupBy(shards, (s) => s.node);
 const nodeGroupsSummary = Object.keys(nodeGroups).reduce((accum, node) => {
-  return Object.assign({},
-    accum,
-    {
-      [node]: {
-        num_shards: nodeGroups[node].length,
-        shards: nodeGroups[node],
-      }
-    }
-  );
-}, {});
+  return accum.concat([ `${node}: ${nodeGroups[node].length}` ]);
+}, []);
 
 const stateGroups = groupBy(shards, (s) => s.prirep + '-' + s.state);
 
@@ -32,11 +24,9 @@ const byteGroups = groupBy(shards, (s) => {
 const byteKeys = Object.keys(byteGroups).map((k) => parseInt(k, 10));
 byteKeys.sort((a, b) => a - b); // ensure numeric not unicode sort
 
-const byteGroupsSummary = [];
-byteKeys.forEach((key) => {
-  const currGroup = key;
-  byteGroupsSummary.push(`${currGroup}: ${byteGroups[currGroup].length}`);
-});
+const byteGroupsSummary = byteKeys.reduce((accum, key) => {
+  return accum.concat([ `${key}: ${byteGroups[key].length}` ]);
+}, []);
 
 const biggest = {
   bytes: last(byteKeys),
@@ -47,10 +37,11 @@ const biggest = {
 console.log(
   JSON.stringify({
     num_shards_total: shards.length,
-    nodes: nodeGroupsSummary,
+    shards_by_node_summary: nodeGroupsSummary,
+    shards_by_node: nodeGroups,
     states: stateGroups,
-    shards_by_gb_full: byteGroups,
     shards_by_gb_summary: byteGroupsSummary,
+    shards_by_gb: byteGroups,
     biggest,
   })
 );

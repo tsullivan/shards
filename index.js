@@ -8,12 +8,6 @@ const shards = shardsJson.filter((s) => {
   return true;
 });
 
-const sizeGroups = groupBy(shards, (s) => {
-  const gb = s.store / 1000 / 1000 / 1000; // convert bytes to gb
-  const group = Math.ceil(gb / 50) * 50; // round s.store to the nearest 50gb
-  return group + 'gb';
-});
-
 const nodeGroups = groupBy(shards, (s) => s.node);
 const nodeGroupsSummary = Object.keys(nodeGroups).reduce((accum, node) => {
   return Object.assign({},
@@ -29,30 +23,36 @@ const nodeGroupsSummary = Object.keys(nodeGroups).reduce((accum, node) => {
 
 const stateGroups = groupBy(shards, (s) => s.prirep + '-' + s.state);
 
-const sizeKeys = Object.keys(sizeGroups).map((k) => parseInt(k, 10));
-sizeKeys.sort();
+const byteGroups = groupBy(shards, (s) => {
+  const gb = s.store / 1000 / 1000 / 1000; // convert bytes to gb
+  const group = Math.ceil(gb / 50) * 50; // round s.store to the nearest 50gb
+  return group + 'gb';
+});
 
-const numShardsPerGroup = sizeKeys.reduce((accum, curr) => {
+const byteKeys = Object.keys(byteGroups).map((k) => parseInt(k, 10));
+byteKeys.sort();
+
+const byteGroupsSummary = byteKeys.reduce((accum, curr) => {
   const currGroup = curr + 'gb';
   return Object.assign({},
     accum,
-    { [currGroup]: sizeGroups[currGroup].length }
+    { [currGroup]: byteGroups[currGroup].length }
   );
 }, {});
 
 const biggest = {
-  group: last(sizeKeys) + 'gb',
-  shards: sizeGroups[last(sizeKeys) + 'gb'],
+  bytes: last(byteKeys) + 'gb',
+  shards: byteGroups[last(byteKeys) + 'gb'],
 };
 
 //eslint-disable-next-line no-console
 console.log(
   JSON.stringify({
     num_shards_total: shards.length,
-    shards_by_group: sizeGroups,
     nodes: nodeGroupsSummary,
     states: stateGroups,
-    num_shards_per_group: numShardsPerGroup,
+    shards_by_bytes_full: byteGroups,
+    shards_by_bytes_summary: byteGroupsSummary,
     biggest,
   })
 );

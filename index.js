@@ -7,6 +7,19 @@ const sizeGroups = groupBy(shards, (s) => {
   return group + 'gb';
 });
 
+const nodeGroups = groupBy(shards, (s) => s.node);
+const nodeGroupsSummary = Object.keys(nodeGroups).reduce((accum, node) => {
+  return Object.assign({},
+    accum,
+    {
+      [node]: {
+        num_shards: nodeGroups[node].length,
+        shards: nodeGroups[node],
+      }
+    }
+  );
+}, {});
+
 const stateGroups = groupBy(shards, (s) => s.prirep + '-' + s.state);
 
 const sizeKeys = Object.keys(sizeGroups).map((k) => parseInt(k, 10));
@@ -30,6 +43,7 @@ console.log(
   JSON.stringify({
     num_shards_total: shards.length,
     shards_by_group: sizeGroups,
+    nodes: nodeGroupsSummary,
     states: stateGroups,
     num_shards_per_group: numShardsPerGroup,
     biggest,

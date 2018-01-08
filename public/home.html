@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <title>Shard View</title>
+</head>
+<body>
+
+  <div class="container">	
+    <ul class="nav nav-tabs">
+      <li>
+        <a href="#shard_allocation" data-toggle="tab">Shard Allocation</a>
+      </li>
+      <li>
+        <a href="#cluster_info" data-toggle="tab">Cluster Info</a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane" id="shard_allocation">
+        <h3>Shard Allocation</h3>
+        <button type="button" class="btn btn-primary btn-lg" data-reset-text="Reload" data-loading-text="Loading...">
+          Load
+        </button>
+        <br>
+        <textarea id="tab-content-shard_allocation" readonly></textarea>
+      </div>
+      <div class="tab-pane" id="cluster_info">
+        <h3>Cluster Info</h3>
+        <button type="button" class="btn btn-primary btn-lg" data-reset-text="Reload" data-loading-text="Loading...">
+          Load
+        </button>
+        <br>
+        <textarea readonly id="tab-content-cluster_info"></textarea readonly>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="js/ajax_tabs.js" type="text/javascript"></script>
+
+</body>
+</html>

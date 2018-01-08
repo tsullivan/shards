@@ -12,6 +12,7 @@
     "eslint": "^4.15.0"
   },
   "dependencies": {
+    "express": "^4.16.2",
     "lodash": "^4.17.4"
   }
 }

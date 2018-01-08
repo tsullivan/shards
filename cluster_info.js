@@ -10,7 +10,7 @@ function getClusterInfo() {
     );
   }, {});
   const nodesByName = Object.keys(nodeInfo).reduce((accum, nodeId) => {
-    const node = nodeInfo[nodeId];
+    const node = Object.assign({}, nodeInfo[nodeId]); // clone object
     node.node_uuid = nodeId;
     const nodeName = node.node_name;
     delete node.node_name;

@@ -1,12 +1,11 @@
 /* global $ */
 
-const getApiDataForContainer = (url, $resultsContainer, onLoading, onDone) => {
+const getApiDataForContainer = (url, onLoading, onDone) => {
   onLoading();
   $.ajax({
     url,
     success: (data) => {
-      $resultsContainer.val(JSON.stringify(data));
-      onDone();
+      onDone(data);
     },
     dataType: 'json'
   });
@@ -15,21 +14,35 @@ const getApiDataForContainer = (url, $resultsContainer, onLoading, onDone) => {
 const updateButtonLoading = ($button) => () => $button.button('loading');
 const updateButtonDone = ($button) => () => $button.button('reset');
 
-function handleClick(event, url, $resultsContainer) {
+function handleClick(event, url, template, $resultsContainer) {
   const $button = $(event.target);
   getApiDataForContainer(
     url,
-    $resultsContainer,
     updateButtonLoading($button),
-    updateButtonDone($button)
+    (data) => {
+      const div = template.render(data);
+      $resultsContainer.html($(div));
+
+      updateButtonDone($button);
+    }
   );
 }
+
+$.templates({
+  clusterInfo: (`
+    <div class="num_shards_total">
+      Total shards: {{:num_shards_total}}
+    </div>
+  `),
+  shardAllocation: null
+});
 
 $(document).ready(() => {
   $('#shard_allocation button').click((event) => {
     handleClick(
       event,
       '/shard_allocation',
+      $.templates.shardAllocation,
       $('#tab-content-shard_allocation')
     );
   });
@@ -38,6 +51,7 @@ $(document).ready(() => {
     handleClick(
       event,
       '/cluster_info',
+      $.templates.clusterInfo,
       $('#tab-content-cluster_info')
     );
   });

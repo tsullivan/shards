@@ -18,27 +18,29 @@
     </ul>
 
     <div class="tab-content">
+
       <div class="tab-pane" id="shard_allocation">
         <h3>Shard Allocation</h3>
         <button type="button" class="btn btn-primary btn-lg" data-reset-text="Reload" data-loading-text="Loading...">
           Load
         </button>
-        <br>
-        <textarea id="tab-content-shard_allocation" readonly></textarea>
+        <div id="tab-content-shard_allocation"></div>
       </div>
+
       <div class="tab-pane" id="cluster_info">
         <h3>Cluster Info</h3>
         <button type="button" class="btn btn-primary btn-lg" data-reset-text="Reload" data-loading-text="Loading...">
           Load
         </button>
-        <br>
-        <textarea readonly id="tab-content-cluster_info"></textarea readonly>
+        <div id="tab-content-cluster_info"></div>
       </div>
+
     </div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js" type="text/javascript"></script>
   <script src="js/ajax_tabs.js" type="text/javascript"></script>
 
 </body>

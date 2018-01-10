@@ -7,41 +7,67 @@
 </head>
 <body>
 
-  <div class="container">	
-    <ul class="nav nav-tabs">
-      <li>
-        <a href="#shard_allocation" data-toggle="tab">Shard Allocation</a>
-      </li>
-      <li>
-        <a href="#cluster_info" data-toggle="tab">Cluster Info</a>
-      </li>
-    </ul>
+  <div class="container" id="shard_allocation_control">
+    <button
+      type="button"
+      class="btn btn-primary btn-lg"
+      data-reset-text="Reload"
+      data-loading-text="Loading..."
+    >
+      Load
+    </button>
 
-    <div class="tab-content">
-
-      <div class="tab-pane" id="shard_allocation">
-        <h2>Shard Allocation</h2>
-        <button type="button" class="btn btn-primary btn-lg" data-reset-text="Reload" data-loading-text="Loading...">
-          Load
-        </button>
-        <div id="tab-content-shard_allocation"></div>
-      </div>
-
-      <div class="tab-pane" id="cluster_info">
-        <h2>Cluster Info</h2>
-        <button type="button" class="btn btn-primary btn-lg" data-reset-text="Reload" data-loading-text="Loading...">
-          Load
-        </button>
-        <div id="tab-content-cluster_info"></div>
-      </div>
-
-    </div>
+    <div id="shard_allocation_content"></div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js" type="text/javascript"></script>
-  <script src="js/ajax_tabs.js" type="text/javascript"></script>
+
+  <script id="shardTemplate" type="text/x-jsrender">
+    <ul>
+      <li>
+        Total shards: {{:num_shards_total}}
+      </li>
+      <li>
+        <a data-toggle="collapse" data-target="#biggestShards" href="#/">
+          Biggest shards: {{:biggest_shards.gb}}gb
+        </a>
+        <div id="biggestShards" class="collapse">
+          Indices:
+          <ul>
+            {{for biggest_shards.shards}}
+              <li>
+                <code>[{{:index}}][{{:shard}}][{{:prirep}}] [{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
+              </li>
+            {{/for}}
+          </ul>
+        </div>
+      </li>
+      <li>
+        Biggest GB group: {{:biggest_group.gb}}gb / {{:biggest_group.num_shards}} shards
+      </li>
+      <li>
+        Shard counts by gb:
+        <ul>
+          {{for shards_by_gb_summary ~shardsByGb=shards_by_gb}}
+            <li>
+              <a data-toggle="collapse" data-target="#shardsByGb{{:gb}}" href="#/">
+                {{:gb}}gb: {{:num_shards}}
+              </a>
+              <div id="shardsByGb{{:gb}}" class="collapse">
+                {{for ~shardsByGb[gb]}}
+                  <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}]</code>
+                {{/for}}
+              </div>
+            </li>
+          {{/for}}
+        </ul>
+      </li>
+    </ul>
+  </script>
+
+  <script src="js/ajax.js" type="text/javascript"></script>
 
 </body>
 </html>

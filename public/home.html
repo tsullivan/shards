@@ -3,11 +3,25 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <style type="text/css">
+    .columned {
+      -webkit-columns: 3;
+      -moz-columns: 3;
+      columns: 3;
+      -moz-column-fill: balance;
+      column-fill: balance;
+    }
+    .columned li {
+      list-style-type: none;
+    }
+  </style>
   <title>Shard View</title>
 </head>
 <body>
 
-  <div class="container" id="shard_allocation_control">
+  <div id="shard_allocation_control">
+    <div id="shard_allocation_content"></div>
+
     <button
       type="button"
       class="btn btn-primary btn-lg"
@@ -16,8 +30,6 @@
     >
       Load
     </button>
-
-    <div id="shard_allocation_content"></div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
@@ -25,6 +37,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js" type="text/javascript"></script>
 
   <script id="shardTemplate" type="text/x-jsrender">
+    <h2>Shard Allocation Summary</h2>
     <ul>
       <li>
         Total shards: {{:num_shards_total}}
@@ -34,11 +47,10 @@
           Biggest shards: {{:biggest_shards.gb}}gb
         </a>
         <div id="biggestShards" class="collapse">
-          Indices:
-          <ul>
+          <ul class="columned">
             {{for biggest_shards.shards}}
               <li>
-                <code>[{{:index}}][{{:shard}}][{{:prirep}}] [{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
+                <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
               </li>
             {{/for}}
           </ul>
@@ -48,7 +60,7 @@
         Biggest GB group: {{:biggest_group.gb}}gb / {{:biggest_group.num_shards}} shards
       </li>
       <li>
-        Shard counts by gb:
+        Shard counts by GB:
         <ul>
           {{for shards_by_gb_summary ~shardsByGb=shards_by_gb}}
             <li>
@@ -56,9 +68,34 @@
                 {{:gb}}gb: {{:num_shards}}
               </a>
               <div id="shardsByGb{{:gb}}" class="collapse">
-                {{for ~shardsByGb[gb]}}
-                  <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}]</code>
-                {{/for}}
+                <ul class="columned">
+                  {{for ~shardsByGb[gb]}}
+                    <li>
+                      <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
+                    </li>
+                  {{/for}}
+                </ul>
+              </div>
+            </li>
+          {{/for}}
+        </ul>
+      </li>
+      <li>
+        Shards by node:
+        <ul>
+          {{for shards_by_node_summary ~shardsByNode=shards_by_node}}
+            <li>
+              <a data-toggle="collapse" data-target="#shardsByNode{{:node}}" href="#/">
+                {{:node}}: {{:num_shards}}
+              </a>
+              <div id="shardsByNode{{:node}}" class="collapse">
+                <ul class="columned">
+                  {{for ~shardsByNode[node]}}
+                    <li>
+                      <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
+                    </li>
+                  {{/for}}
+                </ul>
               </div>
             </li>
           {{/for}}

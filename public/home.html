@@ -43,24 +43,19 @@
         Total shards: {{:num_shards_total}}
       </li>
       <li>
-        <a data-toggle="collapse" data-target="#biggestShards" href="#/">
-          Biggest shards: {{:biggest_shards.gb}}gb
+        Biggest shards:
+        <a data-toggle="collapse" data-target="#shardsByGb{{:biggest_shards.gb}}" href="#/">
+          {{:biggest_shards.gb}}gb
         </a>
-        <div id="biggestShards" class="collapse">
-          <ul class="columned">
-            {{for biggest_shards.shards}}
-              <li>
-                <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
-              </li>
-            {{/for}}
-          </ul>
-        </div>
       </li>
       <li>
-        Biggest GB group: {{:biggest_group.gb}}gb / {{:biggest_group.num_shards}} shards
+        Most shards size:
+        <a data-toggle="collapse" data-target="#shardsByGb{{:biggest_group.gb}}" href="#/">
+          {{:biggest_group.gb}}gb / {{:biggest_group.num_shards}} shards
+        </a>
       </li>
       <li>
-        Shard counts by GB:
+        Shards by size:
         <ul>
           {{for shards_by_gb_summary ~shardsByGb=shards_by_gb}}
             <li>

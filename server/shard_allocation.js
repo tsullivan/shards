@@ -25,13 +25,19 @@ function getAllocation() {
   }, []);
 
   const stateGroups = groupBy(shards, (s) => s.prirep + '-' + s.state);
+  const stateGroupsSummary = Object.keys(stateGroups).reduce((accum, state) => {
+    return accum.concat([
+      { state, num_shards: stateGroups[state].length }
+    ]);
+  }, []);
 
   return Object.assign({},
     {
       num_shards_total: shards.length,
       shards_by_node_summary: nodeGroupsSummary,
       shards_by_node: nodeGroups,
-      states: stateGroups,
+      shards_by_state_summary: stateGroupsSummary,
+      shards_by_state: stateGroups,
     },
     getByteProperties(shards)
   );

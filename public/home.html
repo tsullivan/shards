@@ -96,6 +96,27 @@
           {{/for}}
         </ul>
       </li>
+      <li>
+        Shards by state:
+        <ul>
+          {{for shards_by_state_summary ~shardsByState=shards_by_state}}
+            <li>
+              <a data-toggle="collapse" data-target="#shardsByState{{:state}}" href="#/">
+                {{:state}}: {{:num_shards}}
+              </a>
+              <div id="shardsByState{{:state}}" class="collapse">
+                <ul class="columned">
+                  {{for ~shardsByState[state]}}
+                    <li>
+                      <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
+                    </li>
+                  {{/for}}
+                </ul>
+              </div>
+            </li>
+          {{/for}}
+        </ul>
+      </li>
     </ul>
   </script>
 

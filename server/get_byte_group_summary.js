@@ -12,12 +12,9 @@ function getByteProperties(shards) {
   const byteKeys = Object.keys(byteGroups).map((k) => parseInt(k, 10));
   byteKeys.sort((a, b) => a - b); // ensure numeric not unicode sort
 
-  const byteGroupsSummary = byteKeys.reduce((accum, key) => {
+  const byteGroupsSummary = byteKeys.reduce((accum, gb) => {
     return accum.concat([
-      {
-        gb: key,
-        num_shards: byteGroups[key].length,
-      }
+      { gb, num_shards: byteGroups[gb].length }
     ]);
   }, []);
 

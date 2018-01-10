@@ -1,4 +1,4 @@
-const allocation = require('./allocation_explain_disk');
+const allocation = require('../diagnostic/allocation_explain_disk');
 const getByteProperties = require('./get_byte_group_summary');
 
 function getClusterInfo() {

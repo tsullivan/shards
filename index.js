@@ -10,13 +10,13 @@ app.get('/', (req, res) => {
 
 // cluster_info route
 app.get('/cluster_info', (req, res) => {
-  const cluster_info = require('./cluster_info');
+  const cluster_info = require('./server/cluster_info');
   res.json(cluster_info);
 });
 
 // shard allocation route
 app.get('/shard_allocation', (req, res) => {
-  const shard_allocation = require('./shard_allocation');
+  const shard_allocation = require('./server/shard_allocation');
   res.json(shard_allocation);
 });
 

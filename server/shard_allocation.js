@@ -1,5 +1,5 @@
 const { groupBy } = require('lodash');
-const shardsJson = require('./shards');
+const shardsJson = require('../diagnostic/shards');
 const getByteProperties = require('./get_byte_group_summary');
 
 function getAllocation() {

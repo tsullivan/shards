@@ -19,7 +19,9 @@ function getAllocation() {
 
   const nodeGroups = groupBy(shards, (s) => s.node);
   const nodeGroupsSummary = Object.keys(nodeGroups).reduce((accum, node) => {
-    return accum.concat([ `${node}: ${nodeGroups[node].length}` ]);
+    return accum.concat([
+      { node, num_shards: nodeGroups[node].length, }
+    ]);
   }, []);
 
   const stateGroups = groupBy(shards, (s) => s.prirep + '-' + s.state);

@@ -25,8 +25,13 @@ $(document).ready(() => {
       () => updateButtonLoading($goButton),
       (data) => {
         updateButtonDone($goButton);
+
+        // render data
         const div = $('#shardSummary').render(data);
         $('#shard_summary_content').html($(div));
+
+        // data table
+        $('table.shardTable').DataTable();
       }
     );
 

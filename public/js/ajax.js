@@ -32,6 +32,9 @@ $(document).ready(() => {
 
         // data table
         $('table.shardTable').DataTable();
+
+        // fanciness
+        $('.showAfterLoad').removeClass('hidden');
       }
     );
 

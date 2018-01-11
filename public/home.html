@@ -24,7 +24,7 @@
         </button>
       </p>
 
-      <p>
+      <p class="showAfterLoad hidden">
         <a
           href="https://github.com/tsullivan/shards"
           target="_blank"
@@ -92,7 +92,12 @@
       <li>
         Shards by size in GB:
         <ul>
-          {{for shards_by_gb itemVar="~shard" tmpl="#shardTable" ~listing="shardsByGb" ~key="gb"}}
+          {{for shards_by_gb
+            itemVar="~shard"
+            tmpl="#shardTable"
+            ~listing="shardsByGb"
+            ~key="gb"
+          }}
             {{:gb}}gb: {{:shards.length}}
           {{/for}}
         </ul>
@@ -100,7 +105,12 @@
       <li>
         Shards by node:
         <ul>
-          {{for shards_by_node itemVar="~shard" tmpl="#shardTable" ~listing="shardsByNode" ~key="node_key"}}
+          {{for shards_by_node
+            itemVar="~shard"
+            tmpl="#shardTable"
+            ~listing="shardsByNode"
+            ~key="node_key"
+          }}
             {{:node}}: {{:shards.length}}
           {{/for}}
         </ul>
@@ -108,7 +118,12 @@
       <li>
         Shards by state:
         <ul>
-          {{for shards_by_state itemVar="~shard" tmpl="#shardTable" ~listing="shardsByState" ~key="state"}}
+          {{for shards_by_state
+            itemVar="~shard"
+            tmpl="#shardTable"
+            ~listing="shardsByState"
+            ~key="state"
+          }}
             {{:state}}: {{:shards.length}}
           {{/for}}
         </ul>

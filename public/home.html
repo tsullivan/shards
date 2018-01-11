@@ -3,18 +3,6 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <style type="text/css">
-    .columned {
-      -webkit-columns: 3;
-      -moz-columns: 3;
-      columns: 3;
-      -moz-column-fill: balance;
-      column-fill: balance;
-    }
-    .columned li {
-      list-style-type: none;
-    }
-  </style>
   <title>Shard View</title>
 </head>
 <body>
@@ -55,13 +43,34 @@
       </a>
 
       <div id="{{:~listing}}-{{:~shard[~key]}}" class="collapse">
-        <ul class="columned">
-          {{for shards}}
-            <li>
-              <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
-            </li>
-          {{/for}}
-        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th> Index </th>
+              <th> Node </th>
+              <th> Shard </th>
+              <th> Data </th>
+            </tr>
+          </thead>
+          <tbody>
+            {{for shards}}
+              <tr>
+                <td>
+                  <code>{{:index}}</code>
+                </td>
+                <td>
+                  <code>{{:node}}</code>
+                </td>
+                <td>
+                  <code>[{{:shard}}][{{:prirep}}][{{:state}}]</code>
+                </td>
+                <td>
+                  <code>{{:store}} bytes</code>
+                </td>
+              </tr>
+            {{/for}}
+          </tbody>
+        </table>
       </div>
     </li>
   </script>
@@ -75,7 +84,7 @@
       <li>
         Shards by size in GB:
         <ul>
-          {{for shards_by_gb ~listing="shardsByGb" ~key="gb" itemVar="~shard" tmpl="#shardTable"}}
+          {{for shards_by_gb itemVar="~shard" tmpl="#shardTable" ~listing="shardsByGb" ~key="gb"}}
             {{:gb}}gb: {{:shards.length}}
           {{/for}}
         </ul>
@@ -83,7 +92,7 @@
       <li>
         Shards by node:
         <ul>
-          {{for shards_by_node ~listing="shardsByNode" ~key="node_key" itemVar="~shard" tmpl="#shardTable"}}
+          {{for shards_by_node itemVar="~shard" tmpl="#shardTable" ~listing="shardsByNode" ~key="node_key"}}
             {{:node}}: {{:shards.length}}
           {{/for}}
         </ul>
@@ -91,7 +100,7 @@
       <li>
         Shards by state:
         <ul>
-          {{for shards_by_state ~listing="shardsByState" ~key="state" itemVar="~shard" tmpl="#shardTable"}}
+          {{for shards_by_state itemVar="~shard" tmpl="#shardTable" ~listing="shardsByState" ~key="state"}}
             {{:state}}: {{:shards.length}}
           {{/for}}
         </ul>

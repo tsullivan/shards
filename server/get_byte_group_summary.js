@@ -1,4 +1,4 @@
-const { groupBy, last, maxBy } = require('lodash');
+const { groupBy } = require('lodash');
 
 const GROUP_BY = 10; // groups lists of shards by this many gigabytes
 
@@ -18,17 +18,8 @@ function getByteProperties(shards) {
     ]);
   }, []);
 
-  const biggestShards = {
-    gb: last(byteKeys),
-    shards: byteGroups[last(byteKeys)],
-  };
-
-  const biggestGroup = maxBy(byteGroupsSummary, (s) => s.shards.length);
-
   return {
-    shards_by_gb: byteGroupsSummary,
-    biggest_shards: biggestShards,
-    biggest_group: biggestGroup,
+    shards_by_gb: byteGroupsSummary
   };
 }
 

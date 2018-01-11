@@ -14,7 +14,7 @@ function getByteProperties(shards) {
 
   const byteGroupsSummary = byteKeys.reduce((accum, gb) => {
     return accum.concat([
-      { gb, num_shards: byteGroups[gb].length }
+      { gb, shards: byteGroups[gb] }
     ]);
   }, []);
 
@@ -23,11 +23,10 @@ function getByteProperties(shards) {
     shards: byteGroups[last(byteKeys)],
   };
 
-  const biggestGroup = maxBy(byteGroupsSummary, (s) => s.num_shards);
+  const biggestGroup = maxBy(byteGroupsSummary, (s) => s.shards.length);
 
   return {
-    shards_by_gb_summary: byteGroupsSummary,
-    shards_by_gb: byteGroups,
+    shards_by_gb: byteGroupsSummary,
     biggest_shards: biggestShards,
     biggest_group: biggestGroup,
   };

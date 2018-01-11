@@ -14,31 +14,24 @@ const getApiDataForContainer = (url, onLoading, onDone) => {
 const updateButtonLoading = ($button) => $button.button('loading');
 const updateButtonDone = ($button) => $button.button('reset');
 
-function handleClick(event, url, templateSelector, containerSelector) {
-  const $button = $(event.target);
-  getApiDataForContainer(
-    url,
-    () => updateButtonLoading($button),
-    (data) => {
-      updateButtonDone($button);
-
-      const div = $(templateSelector).render(data);
-      $(containerSelector).html($(div));
-    }
-  );
-}
-
 $(document).ready(() => {
   const $goButton = $('#shard_allocation_control button');
 
   $goButton.click((event) => {
-    handleClick(
-      event,
+    const $goButton = $(event.target);
+
+    getApiDataForContainer(
       '/shard_allocation',
-      '#shardTemplate',
-      '#shard_allocation_content'
+      () => updateButtonLoading($goButton),
+      (data) => {
+        updateButtonDone($goButton);
+        const div = $('#shardSummary').render(data);
+        $('#shard_summary_content').html($(div));
+      }
     );
+
   });
 
   $goButton.click();
 });
+

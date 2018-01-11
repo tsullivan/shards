@@ -20,7 +20,7 @@
 <body>
 
   <div id="shard_allocation_control">
-    <div id="shard_allocation_content"></div>
+    <div id="shard_summary_content"></div>
 
     <div class="text-center">
       <p>
@@ -48,84 +48,51 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js" type="text/javascript"></script>
 
-  <script id="shardTemplate" type="text/x-jsrender">
+  <script id="shardTable" type="text/x-jsrender">
+    <li>
+      <a data-toggle="collapse" data-target="#{{:~listing}}-{{:~shard[~key]}}" href="#/">
+        {{include tmpl=#content/}}
+      </a>
+
+      <div id="{{:~listing}}-{{:~shard[~key]}}" class="collapse">
+        <ul class="columned">
+          {{for shards}}
+            <li>
+              <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
+            </li>
+          {{/for}}
+        </ul>
+      </div>
+    </li>
+  </script>
+
+  <script id="shardSummary" type="text/x-jsrender">
     <h2>Shard Allocation Summary</h2>
     <ul>
       <li>
         Total shards: {{:num_shards_total}}
       </li>
       <li>
-        Biggest shards:
-        <a data-toggle="collapse" data-target="#shardsByGb{{:biggest_shards.gb}}" href="#/">
-          {{:biggest_shards.gb}}gb
-        </a>
-      </li>
-      <li>
-        Most shards size:
-        <a data-toggle="collapse" data-target="#shardsByGb{{:biggest_group.gb}}" href="#/">
-          {{:biggest_group.gb}}gb / {{:biggest_group.num_shards}} shards
-        </a>
-      </li>
-      <li>
-        Shards by size:
+        Shards by size in GB:
         <ul>
-          {{for shards_by_gb_summary ~shardsByGb=shards_by_gb}}
-            <li>
-              <a data-toggle="collapse" data-target="#shardsByGb{{:gb}}" href="#/">
-                {{:gb}}gb: {{:num_shards}}
-              </a>
-              <div id="shardsByGb{{:gb}}" class="collapse">
-                <ul class="columned">
-                  {{for ~shardsByGb[gb]}}
-                    <li>
-                      <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
-                    </li>
-                  {{/for}}
-                </ul>
-              </div>
-            </li>
+          {{for shards_by_gb ~listing="shardsByGb" ~key="gb" itemVar="~shard" tmpl="#shardTable"}}
+            {{:gb}}gb: {{:shards.length}}
           {{/for}}
         </ul>
       </li>
       <li>
         Shards by node:
         <ul>
-          {{for shards_by_node_summary ~shardsByNode=shards_by_node}}
-            <li>
-              <a data-toggle="collapse" data-target="#shardsByNode{{:node}}" href="#/">
-                {{:node}}: {{:num_shards}}
-              </a>
-              <div id="shardsByNode{{:node}}" class="collapse">
-                <ul class="columned">
-                  {{for ~shardsByNode[node]}}
-                    <li>
-                      <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
-                    </li>
-                  {{/for}}
-                </ul>
-              </div>
-            </li>
+          {{for shards_by_node ~listing="shardsByNode" ~key="node_key" itemVar="~shard" tmpl="#shardTable"}}
+            {{:node}}: {{:shards.length}}
           {{/for}}
         </ul>
       </li>
       <li>
         Shards by state:
         <ul>
-          {{for shards_by_state_summary ~shardsByState=shards_by_state}}
-            <li>
-              <a data-toggle="collapse" data-target="#shardsByState{{:state}}" href="#/">
-                {{:state}}: {{:num_shards}}
-              </a>
-              <div id="shardsByState{{:state}}" class="collapse">
-                <ul class="columned">
-                  {{for ~shardsByState[state]}}
-                    <li>
-                      <code>[{{:index}}][{{:shard}}][{{:prirep}}][{{:state}}] node[{{:node}}] bytes[{{:store}}]</code>
-                    </li>
-                  {{/for}}
-                </ul>
-              </div>
-            </li>
+          {{for shards_by_state ~listing="shardsByState" ~key="state" itemVar="~shard" tmpl="#shardTable"}}
+            {{:state}}: {{:shards.length}}
           {{/for}}
         </ul>
       </li>

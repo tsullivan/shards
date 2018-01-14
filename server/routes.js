@@ -33,10 +33,5 @@ module.exports = function registerRoutes(app) {
     res.json(json);
   });
 
-  app.get('/shards/settings', (req, res) => {
-    const json = runShardRoute('./shards/settings');
-    res.json(json);
-  });
-
   // segment routes
 };

@@ -10,69 +10,68 @@
 <body>
 
   <div class="container">
-    <div id="shard_summary_content"></div>
-
-    <div id="shard_allocation_control" class="text-center">
-      <p>
-        <button
-          type="button"
-          class="btn btn-primary btn-lg"
-          data-reset-text="Reload"
-          data-loading-text="Loading..."
-        >
-          Load
-        </button>
-      </p>
-
-      <p class="showAfterLoad hidden">
-        <a
-          href="https://github.com/tsullivan/shards"
-          target="_blank"
-        >code on github</a>
-      </p>
+    <div>
+      <ul class="nav nav-tabs" role="tablist" id="mainTabList"></ul>
+      <div class="tab-content" id="mainTabPanes"></div>
     </div>
-
   </div>
 
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js"></script>
+  <script type="text/x-jsrender" id="tabNav">
+    <li role="presentation">
+      <a href="#{{:key}}Tab" aria-controls="{{:key}}Tab" role="tab" data-toggle="tab">
+        {{:title}}
+      </a>
+    </li>
+  </script>
+
+  <script type="text/x-jsrender" id="tabPane">
+    <div role="tabpanel" class="tab-pane" id="{{:key}}Tab">
+      <h2>{{:title}}</h2>
+
+      <div id="{{:key}}Content"></div>
+
+      <div class="text-center">
+        <p>
+          <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            data-shard-api="{{:shardApi}}"
+            data-template="{{:template}}"
+            data-reset-text="Reload"
+            data-loading-text="Loading..."
+          >
+            Load
+          </button>
+        </p>
+      </div>
+    </div>
+  </script>
 
   <script type="text/x-jsrender" id="shardTable">
     <li class="shardTable">
-      <a data-toggle="collapse" data-target="#{{:~listing}}-{{:~shard[~key]}}" href="#/">
+      <a data-toggle="collapse" data-target="#{{:~listing}}-{{:#index}}" href="#/">
         {{include tmpl=#content/}}
       </a>
 
-      <div id="{{:~listing}}-{{:~shard[~key]}}" class="collapse">
+      <div id="{{:~listing}}-{{:#index}}" class="collapse">
         <div class="panel panel-default">
           <div class="panel-body">
             <table class="shardTable table table-striped table-bordered">
               <thead>
                 <tr>
-                  <th> Index </th>
-                  <th> Node </th>
-                  <th> Shard </th>
-                  <th> Data </th>
+                  <th>Index</th>
+                  <th>Node</th>
+                  <th>Shard</th>
+                  <th>Data</th>
                 </tr>
               </thead>
               <tbody>
                 {{for shards}}
                   <tr>
-                    <td>
-                      <code>{{:index}}</code>
-                    </td>
-                    <td>
-                      <code>{{:node}}</code>
-                    </td>
-                    <td>
-                      <code>[{{:shard}}][{{:prirep}}][{{:state}}]</code>
-                    </td>
-                    <td>
-                      <code>{{:store}} bytes</code>
-                    </td>
+                    <td><code>{{:index}}</code></td>
+                    <td><code>{{:node}}</code></td>
+                    <td><code>[{{:shard}}][{{:prirep}}][{{:state}}]</code></td>
+                    <td><code>{{:store}} bytes</code></td>
                   </tr>
                 {{/for}}
               </tbody>
@@ -83,54 +82,35 @@
     </li>
   </script>
 
-  <script type="text/x-jsrender" id="shardSummary">
-    <h2>Shard Allocation Summary</h2>
+  <script type="text/x-jsrender" id="shardNodes">
     <ul>
-      <li>
-        Total shards: {{:num_shards_total}}
-      </li>
-      <li>
-        Shards by size in GB:
-        <ul>
-          {{for shards_by_gb
-            itemVar="~shard"
-            tmpl="#shardTable"
-            ~listing="shardsByGb"
-            ~key="gb"
-          }}
-            {{:gb}}gb: {{:shards.length}}
-          {{/for}}
-        </ul>
-      </li>
-      <li>
-        Shards by node:
-        <ul>
-          {{for shards_by_node
-            itemVar="~shard"
-            tmpl="#shardTable"
-            ~listing="shardsByNode"
-            ~key="node_key"
-          }}
-            {{:node}}: {{:shards.length}}
-          {{/for}}
-        </ul>
-      </li>
-      <li>
-        Shards by state:
-        <ul>
-          {{for shards_by_state
-            itemVar="~shard"
-            tmpl="#shardTable"
-            ~listing="shardsByState"
-            ~key="state"
-          }}
-            {{:state}}: {{:shards.length}}
-          {{/for}}
-        </ul>
-      </li>
+      {{for data tmpl="#shardTable" ~listing="shardsByNode" }}
+        {{:node}}: {{:shards.length}}
+      {{/for}}
     </ul>
   </script>
 
+  <script type="text/x-jsrender" id="shardStates">
+    <ul>
+      {{for data tmpl="#shardTable" ~listing="shardStates" }}
+        {{:setting}}: {{:setting.length}}
+      {{/for}}
+    </ul>
+  </script>
+
+  <script type="text/x-jsrender" id="shardBytes">
+    <ul>
+      {{for data tmpl="#shardTable" ~listing="shardBytes" }}
+        {{:gb}}gb: {{:shards.length}}
+      {{/for}}
+    </ul>
+  </script>
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.90/jsrender.min.js"></script>
   <script type="text/javascript" src="js/ajax.js"></script>
 
 </body>

@@ -15,31 +15,62 @@ const updateButtonLoading = ($button) => $button.button('loading');
 const updateButtonDone = ($button) => $button.button('reset');
 
 $(document).ready(() => {
-  const $goButton = $('#shard_allocation_control button');
+  const tablist = [
+    $('#tabNav').render({ key: 'shardNodes', title: 'Shards by Node' }),
+    $('#tabNav').render({ key: 'shardStates', title: 'Shards by Index State' }),
+    $('#tabNav').render({ key: 'shardBytes', title: 'Shards by Bytes Size' }),
+  ];
+  $('#mainTabList').html($(tablist.join('')));
 
-  $goButton.click((event) => {
-    const $goButton = $(event.target);
+  const tabpanes = [
+    $('#tabPane').render({
+      key: 'shardNodes',
+      title: 'Nodes',
+      shardApi: '/shards/nodes',
+      template: '#shardNodes',
+    }),
+    $('#tabPane').render({
+      key: 'shardStates',
+      title: 'Index States',
+      shardApi: '/shards/states',
+      template: '#shardStates',
+    }),
+    $('#tabPane').render({
+      key: 'shardBytes',
+      title: 'Byte Size Groups',
+      shardApi: '/shards/bytes',
+      template: '#shardBytes',
+    })
+  ];
+  $('#mainTabPanes').html($(tabpanes.join('')));
 
+  $('#mainTabList a').click(function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+    const $loadButton = $($(this).attr('href')).find('button[data-shard-api]');
+    if ($loadButton && $loadButton.text().trim() === 'Load') {
+      $loadButton.click(); // don't click if it says 'Reload'
+    }
+  });
+
+  $('#mainTabPanes button[data-shard-api]').click((e) => {
+    const $button = $(e.target);
+    const api = $button.data('shard-api');
+    const template = $button.data('template');
     getApiDataForContainer(
-      '/shard_allocation',
-      () => updateButtonLoading($goButton),
+      api,
+      () => updateButtonLoading($button),
       (data) => {
-        updateButtonDone($goButton);
+        updateButtonDone($button);
 
         // render data
-        const div = $('#shardSummary').render(data);
-        $('#shard_summary_content').html($(div));
+        const div = $(template).render({ data });
+        $(`${template}Content`).html($(div));
 
         // data table
         $('table.shardTable').DataTable();
-
-        // fanciness
-        $('.showAfterLoad').removeClass('hidden');
       }
     );
-
   });
 
-  $goButton.click();
 });
-

@@ -8,13 +8,19 @@ module.exports = function getSettings(shards) {
       shards: indicesGroups[index]
     }]);
   }, []);
-  const shardsBySetting = groupBy(shardsByIndex, (obj) => {
+  const shardsBySettingKeys = groupBy(shardsByIndex, (obj) => {
     const setShards = obj.shards.map(({ prirep, shard, state }) => {
       return `${prirep}${shard}-${state}`;
     });
     setShards.sort();
     return setShards.join('/');
   });
+  const shardsBySetting = Object.keys(shardsBySettingKeys).reduce((accum, setting) => {
+    return accum.concat([{
+      setting,
+      indices: shardsBySettingKeys[setting]
+    }]);
+  }, []);
 
   return shardsBySetting;
 };

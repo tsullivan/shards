@@ -18,9 +18,7 @@ function getByteProperties(shards) {
     ]);
   }, []);
 
-  return {
-    shards_by_gb: byteGroupsSummary
-  };
+  return byteGroupsSummary;
 }
 
 module.exports = getByteProperties;

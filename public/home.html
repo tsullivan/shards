@@ -92,8 +92,8 @@
 
   <script type="text/x-jsrender" id="shardStates">
     <ul>
-      {{for data tmpl="#shardTable" ~listing="shardStates" }}
-        {{:setting}}: {{:setting.length}}
+      {{for data}}
+        <li>{{:setting}}: {{:indices.length}}</li>
       {{/for}}
     </ul>
   </script>

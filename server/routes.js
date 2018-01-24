@@ -2,7 +2,7 @@ function runShardRoute(routePath) {
   const shards = require('../diagnostic/shards');
   if (shards.error) {
     return {
-      unavailable: true,
+      available: false,
       unavailableReason: shards.error.root_cause,
     };
   }

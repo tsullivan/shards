@@ -27,9 +27,7 @@
   <script type="text/x-jsrender" id="tabPane">
     <div role="tabpanel" class="tab-pane" id="{{:key}}Tab">
       <h2>{{:title}}</h2>
-
       <div id="{{:key}}Content"></div>
-
       <div class="text-center">
         <p>
           <button
@@ -79,8 +77,7 @@
       <a data-toggle="collapse" data-target="#{{:~itemPrefix}}-{{:#index}}" href="#/">
         {{include tmpl=#content/}}
       </a>
-
-      <div id="{{:~itemPrefix}}-{{:#index}}" class="collapse">
+      <div id="{{:~itemPrefix}}-{{:#index}}" class="collapsibleTableContainer collapse">
         <div class="panel panel-default">
           <div class="panel-body">
             {{include tmpl="#shardTable" ~showIndices=true /}}
@@ -92,20 +89,23 @@
 
   <script type="text/x-jsrender" id="shardIndicesByState">
     <li>
-      <a data-toggle="collapse" data-target="#{{:~itemPrefix}}-{{:#index}}" href="#/">
+      <a data-toggle="collapse" data-target="#shardState-{{:#index}}" href="#/">
         {{:setting}}: {{:indices.length}} indices
       </a>
-
-      <div id="{{:~itemPrefix}}-{{:#index}}" class="collapse">
+      <div id="shardState-{{:#index}}" class="collapse">
         <div class="panel panel-default">
           <div class="panel-body">
             <ul>
-              {{for indices ~itemPrefix="shardStateIndex" }}
+              {{for indices ~settingKeyword=setting_keyword }}
                 <li>
-                  <code>{{:index}}</code>
-                  <div class="panel panel-default">
-                    <div class="panel-body">
-                      {{include tmpl="#shardTable" ~showIndices=false /}}
+                  <a data-toggle="collapse" data-target="#shardsForState-{{:~settingKeyword}}-{{:#index}}" href="#/">
+                    <code>{{:index}}</code>
+                  </a>
+                  <div id="shardsForState-{{:~settingKeyword}}-{{:#index}}" class="collapsibleTableContainer collapse">
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        {{include tmpl="#shardTable" ~showIndices=false /}}
+                      </div>
                     </div>
                   </div>
                 </li>
@@ -135,7 +135,7 @@
 
   <script type="text/x-jsrender" id="shardStates">
     <ul>
-      {{for data tmpl="#shardIndicesByState" ~itemPrefix="shardState" }}
+      {{for data tmpl="#shardIndicesByState" }}
       {{/for}}
     </ul>
   </script>

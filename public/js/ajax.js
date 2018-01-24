@@ -16,24 +16,24 @@ const updateButtonDone = $button => $button.button('reset');
 
 $(document).ready(() => {
   const tablist = [
-    $('#tabNav').render({ key: 'shardNodes', title: 'Shards by Node' }),
     $('#tabNav').render({ key: 'shardStates', title: 'Shards by Index State' }),
+    $('#tabNav').render({ key: 'shardNodes', title: 'Shards by Node' }),
     $('#tabNav').render({ key: 'shardBytes', title: 'Shards by Bytes Size' })
   ];
   $('#mainTabList').html($(tablist.join('')));
 
   const tabpanes = [
     $('#tabPane').render({
-      key: 'shardNodes',
-      title: 'Nodes',
-      shardApi: '/shards/nodes',
-      template: '#shardNodes'
-    }),
-    $('#tabPane').render({
       key: 'shardStates',
       title: 'Index States',
       shardApi: '/shards/states',
       template: '#shardStates'
+    }),
+    $('#tabPane').render({
+      key: 'shardNodes',
+      title: 'Nodes',
+      shardApi: '/shards/nodes',
+      template: '#shardNodes'
     }),
     $('#tabPane').render({
       key: 'shardBytes',
@@ -83,4 +83,7 @@ $(document).ready(() => {
       }
     );
   });
+
+  // auto run first tab content
+  $('#mainTabList').find('a').first().click();
 });

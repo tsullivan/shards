@@ -48,34 +48,69 @@
   </script>
 
   <script type="text/x-jsrender" id="shardTable">
-    <li class="shardTable">
-      <a data-toggle="collapse" data-target="#{{:~listing}}-{{:#index}}" href="#/">
+    <table class="shardItems table table-striped table-bordered">
+      <thead>
+        <tr>
+          {{if ~showIndices}}
+            <th>Index</th>
+          {{/if}}
+          <th>Node</th>
+          <th>Shard</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{for shards}}
+          <tr>
+            {{if ~showIndices}}
+              <td><code>{{:index}}</code></td>
+            {{/if}}
+            <td><code>{{:node}}</code></td>
+            <td><code>[{{:shard}}][{{:prirep}}][{{:state}}]</code></td>
+            <td><code>{{:store}} bytes</code></td>
+          </tr>
+        {{/for}}
+      </tbody>
+    </table>
+  </script>
+
+  <script type="text/x-jsrender" id="shardItems">
+    <li class="shardItem">
+      <a data-toggle="collapse" data-target="#{{:~itemPrefix}}-{{:#index}}" href="#/">
         {{include tmpl=#content/}}
       </a>
 
-      <div id="{{:~listing}}-{{:#index}}" class="collapse">
+      <div id="{{:~itemPrefix}}-{{:#index}}" class="collapse">
         <div class="panel panel-default">
           <div class="panel-body">
-            <table class="shardTable table table-striped table-bordered">
-              <thead>
-                <tr>
-                  <th>Index</th>
-                  <th>Node</th>
-                  <th>Shard</th>
-                  <th>Data</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{for shards}}
-                  <tr>
-                    <td><code>{{:index}}</code></td>
-                    <td><code>{{:node}}</code></td>
-                    <td><code>[{{:shard}}][{{:prirep}}][{{:state}}]</code></td>
-                    <td><code>{{:store}} bytes</code></td>
-                  </tr>
-                {{/for}}
-              </tbody>
-            </table>
+            {{include tmpl="#shardTable" ~showIndices=true /}}
+          </div>
+        </div>
+      </div>
+    </li>
+  </script>
+
+  <script type="text/x-jsrender" id="shardIndicesByState">
+    <li>
+      <a data-toggle="collapse" data-target="#{{:~itemPrefix}}-{{:#index}}" href="#/">
+        {{:setting}}: {{:indices.length}} indices
+      </a>
+
+      <div id="{{:~itemPrefix}}-{{:#index}}" class="collapse">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <ul>
+              {{for indices ~itemPrefix="shardStateIndex" }}
+                <li>
+                  <code>{{:index}}</code>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      {{include tmpl="#shardTable" ~showIndices=false /}}
+                    </div>
+                  </div>
+                </li>
+              {{/for}}
+            </ul>
           </div>
         </div>
       </div>
@@ -84,24 +119,23 @@
 
   <script type="text/x-jsrender" id="shardNodes">
     <ul>
-      {{for data tmpl="#shardTable" ~listing="shardsByNode" }}
+      {{for data tmpl="#shardItems" ~itemPrefix="shardsByNode" }}
         {{:node}}: {{:shards.length}}
-      {{/for}}
-    </ul>
-  </script>
-
-  <script type="text/x-jsrender" id="shardStates">
-    <ul>
-      {{for data}}
-        <li>{{:setting}}: {{:indices.length}}</li>
       {{/for}}
     </ul>
   </script>
 
   <script type="text/x-jsrender" id="shardBytes">
     <ul>
-      {{for data tmpl="#shardTable" ~listing="shardBytes" }}
+      {{for data tmpl="#shardItems" ~itemPrefix="shardBytes" }}
         {{:gb}}gb: {{:shards.length}}
+      {{/for}}
+    </ul>
+  </script>
+
+  <script type="text/x-jsrender" id="shardStates">
+    <ul>
+      {{for data tmpl="#shardIndicesByState" ~itemPrefix="shardState" }}
       {{/for}}
     </ul>
   </script>

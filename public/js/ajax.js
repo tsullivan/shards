@@ -68,7 +68,7 @@ $(document).ready(() => {
         $(`${template}Content`).html($(div));
 
         // data table
-        $('table.shardTable').DataTable();
+        // $('table.shardTable').DataTable();
       }
     );
   });
